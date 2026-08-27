@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CORTIS (COLOR OUTSIDE THE LINE) — Digital Museum</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #080808;
+            color: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+
+            background: rgba(8, 8, 8, 0.75);
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 5px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.5;
+        }
+
+        /* HERO */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            background:
+                radial-gradient(circle at center,
+                #252525 0%,
+                #101010 35%,
+                #080808 70%);
+        }
+
+        .hero small {
+            letter-spacing: 6px;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(70px, 15vw, 190px);
+            letter-spacing: 20px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            color: #aaa;
+            margin-top: 10px;
+            letter-spacing: 3px;
+        }
+
+        .enter-btn {
+            margin-top: 45px;
+            padding: 14px 35px;
+            border: 1px solid #777;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 3px;
+            transition: 0.4s;
+        }
+
+        .enter-btn:hover {
+            background: white;
+            color: black;
+        }
+
+        /* GENERAL */
+        section {
+            padding: 120px 8%;
+        }
+
+        .section-title {
+            margin-bottom: 60px;
+        }
+
+        .section-title span {
+            color: #777;
+            font-size: 12px;
+            letter-spacing: 4px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(35px, 5vw, 70px);
+            margin-top: 10px;
+            letter-spacing: -2px;
+        }
+
+        /* TIMELINE */
+        .timeline {
+            max-width: 900px;
+            margin: auto;
+            border-left: 1px solid #444;
+            padding-left: 40px;
+        }
+
+        .timeline-item {
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -46px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .timeline-item .year {
+            color: #777;
+            letter-spacing: 3px;
+            font-size: 13px;
+        }
+
+        .timeline-item h3 {
+            margin: 10px 0;
+            font-size: 28px;
+        }
+
+        .timeline-item p {
+            color: #aaa;
+            line-height: 1.7;
+        }
+
+        /* MEMBERS */
+        .members {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .member {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            background: #151515;
+            cursor: pointer;
+        }
+
+        .member img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: 0.6s;
+        }
+
+        .member:hover img {
+            transform: scale(1.08);
+            filter: grayscale(0%);
+        }
+
+        .member-info {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 25px;
+
+            background: linear-gradient(
+                transparent,
+                rgba(0,0,0,0.9)
+            );
+        }
+
+        .member-info span {
+            font-size: 11px;
+            color: #aaa;
+            letter-spacing: 2px;
+        }
+
+        .member-info h3 {
+            font-size: 24px;
+            margin-top: 5px;
+        }
+
+        /* GALLERY */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .gallery-item {
+            height: 300px;
+            overflow: hidden;
+            background: #151515;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+            filter: grayscale(0%);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 60px 8%;
+            border-top: 1px solid #222;
+            text-align: center;
+            color: #555;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        /* MODAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+
+            display: none;
+            justify-content: center;
+            align-items: center;
+
+            z-index: 2000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 500px;
+            background: #151515;
+            padding: 40px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .modal-content h2 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p {
+            color: #aaa;
+            line-height: 1.7;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 800px) {
+
+            nav ul {
+                display: none;
+            }
+
+            .hero h1 {
+                letter-spacing: 8px;
+            }
+
+            .members {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .member {
+                height: 300px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            section {
+                padding: 80px 6%;
+            }
+
+            .members {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav>
+        <div class="logo">CORTIS</div>
+
+        <ul>
+            <li><a href="#beginning">BEGINNING</a></li>
+            <li><a href="#members">MEMBERS</a></li>
+            <li><a href="#gallery">GALLERY</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- HERO -->
+
+    <header class="hero">
+
+        <small>DIGITAL ARCHIVE • 2025 — PRESENT</small>
+
+        <h1>CORTIS </h1>
+
+        <p>THE DIGITAL MUSEUM</p>
+
+        <a href="#beginning" class="enter-btn">
+            ENTER THE ARCHIVE
+        </a>
+
+    </header>
+
+
+    <!-- BEGINNING -->
+
+    <section id="beginning">
+
+        <div class="section-title">
+            <span>01 / THE BEGINNING</span>
+            <h2>THE STORY</h2>
+        </div>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="year">2025</div>
+                <h3>A New Chapter</h3>
+                <p>
+                    Five voices, five perspectives, one story in motion. 
+                    CORTIS is a collection of ideas, sounds, and moments shaped by the freedom to create. 
+                    Every rhythm carries a piece of their identity, while every new chapter becomes another fragment of a story still being written.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <div class="year">2025</div>
+                <h3>First Release</h3>
+                <p>
+                    Their first musical era becomes the beginning
+                    of the archive preserved inside this museum.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <div class="year">NOW</div>
+                <h3>The Journey Continues</h3>
+                <p>
+                    Every song, performance and moment becomes
+                    another piece of the CORTIS story.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MEMBERS -->
+
+    <section id="members">
+
+        <div class="section-title">
+            <span>02 / THE MEMBERS</span>
+            <h2>THE ARTISTS</h2>
+        </div>
+
+        <div class="members">
+
+            <div class="member"
+                 onclick="showMember('MARTIN J EDWARDS')">
+
+                <img src="martin.jpg">
+
+                <div class="member-info=Sang penunjuk arah. Ia bukan sekadar berdiri di depan, tetapi menjadi kompas bagi langkah-langkah yang berjalan bersamanya. Tenang dalam memimpin, liar dalam berkarya.">
+                    <span>01</span>
+                    <h3>Martin</h3>
+                </div>
+
+            </div>
+
+
+            <div class="member"
+                 onclick="showMember('ZHAO YUFAN')">
+
+                <img src="james2.jpg">
+
+                <div class="member-info=Gerak yang menjelma bahasa. Setiap langkahnya seperti kalimat yang tak membutuhkan suara tajam, bebas, dan selalu meninggalkan jejak di atas panggung.">
+                    <span>02</span>
+                    <h3>James</h3>
+                </div>
+
+            </div>
+
+
+            <div class="member"
+                 onclick="showMember('KIM JUHOON')">
+
+                <img src="juhoon.jpg">
+
+                <div class="member-info=Suara yang menyimpan cerita. Ada kelembutan dalam caranya hadir, seolah setiap nada yang ia lantunkan membawa serpihan kisah yang ingin tinggal lebih lama.">
+                    <span>03</span>
+                    <h3>Juhoon</h3>
+                </div>
+
+            </div>
+
+
+            <div class="member"
+                 onclick="showMember('EOM SEONGHYEON')">
+
+                <img src="seonghyeon.jpg">
+
+                <div class="member-info=Sang pengukir warna. Ia membawa sisi artistik yang membuat setiap karya terasa lebih hidup seperti seseorang yang mampu menemukan keindahan dari hal-hal sederhana.">
+                    <span>04</span>
+                    <h3>Seonghyeon</h3>
+                </div>
+
+            </div>
+
+
+            <div class="member"
+                 onclick="showMember('ANH KEONHO')">
+
+                <img src="keonho.jpg">
+
+                <div class="member-info=Cahaya paling muda. Dengan energi yang ringan dan tulus, ia menjadi warna yang menghidupkan ruang sebuah awal yang masih panjang untuk dituliskan.">
+                    <span>05</span>
+                    <h3>Keonho</h3>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- GALLERY -->
+
+    <section id="gallery">
+
+        <div class="section-title">
+            <span>03 / VISUAL ARCHIVE</span>
+            <h2>THE MOMENTS</h2>
+        </div>
+
+        <div class="gallery">
+
+            <div class="gallery-item">
+                <img src="cortis.jpg">
+            </div>
+
+            <div class="gallery-item">
+                <img src="ngortis.jpg">
+            </div>
+
+            <div class="gallery-item">
+                <img src="pypd.jpg">
+            </div>
+
+            <div class="gallery-item">
+                <img src="pypd2.jpg">
+            </div>
+
+            <div class="gallery-item">
+                <img src="maju.jpg">
+            </div>
+
+            <div class="gallery-item">
+                <img src=" tisngortis.jpg">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        CORTIS DIGITAL MUSEUM  
+        <br><br>
+        AN UNOFFICIAL FAN-MADE ARCHIVE
+
+    </footer>
+
+
+    <!-- MODAL -->
+
+    <div class="modal" id="memberModal">
+
+        <div class="modal-content">
+
+            <span class="close" onclick="closeModal()">×</span>
+
+            <h2 id="memberName">CORTIS</h2>
+
+            <p>
+                Explore the story, personality, and journey
+                of this member inside the digital archive.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        function showMember(name) {
+
+            document.getElementById("memberName").innerText = name;
+
+            document
+                .getElementById("memberModal")
+                .classList.add("active");
+        }
+
+
+        function closeModal() {
+
+            document
+                .getElementById("memberModal")
+                .classList.remove("active");
+        }
+
+
+        function playSong(button) {
+
+            if (button.innerText === "▶️") {
+
+                button.innerText = "Ⅱ";
+
+            } else {
+
+                button.innerText = "▶️";
+
+            }
+
+        }
+
+
+        window.onclick = function(event) {
+
+            const modal =
+                document.getElementById("memberModal");
+
+            if (event.target === modal) {
+
+                modal.classList.remove("active");
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>
